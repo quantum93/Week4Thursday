@@ -19,7 +19,7 @@ Play.prototype.diceScore = function (diceNumber) {
   for (var i = 1; i <= diceNumber; i++) {
     score += Math.floor((Math.random()*6) + 1);
   }
-  console.log(score);
+  console.log(i);
   return score
 }
 
