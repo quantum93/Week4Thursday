@@ -1,7 +1,6 @@
 // ------------------------------- business logic ---------------------------------------------
-
 var turn = 0
-function swapUser(turn) {
+function swapUser (turn) {
   if (turn === 0) {
     turn = 1;
   } else {
@@ -20,6 +19,7 @@ Play.prototype.diceScore = function (diceNumber) {
   for (var i = 1; i <= diceNumber; i++) {
     score += Math.floor((Math.random()*6) + 1);
   }
+  console.log(score);
   return score
 }
 
@@ -35,21 +35,20 @@ Play.prototype.dicePlay = function (score, diceNumber) {
   }
   return this.currentScore
 }
+
 // ------------------------------- user interface logic ---------------------------------------
 $(document).ready(function() {
-  var diceNumber = parseInt($("#dice").val());
   var playOne = new Play(name)
   var playTwo = new Play(name)
-  // var turn = 0
   $("#play").click(function (event) {
     event.preventDefault();
-    console.log(turn);
+    var diceNumber = parseInt($("#dice").val());
     var inputNameOne = $("#nameOne").val();
     var inputNameTwo = $("#nameTwo").val();
     if (turn === 0) {
       var scoreOne = playOne.diceScore(diceNumber, turn);
       var diceOne = playOne.dicePlay(scoreOne, diceNumber);
-      if(diceOne === 0)
+      if (diceOne === 0)
         turn = swapUser(turn)
       $("#userOne").text(inputNameOne);
       $("#playOne").text(diceOne);
@@ -57,7 +56,7 @@ $(document).ready(function() {
     if (turn === 1) {
       var scoreTwo = playTwo.diceScore(diceNumber, turn);
       var diceTwo = playTwo.dicePlay(scoreTwo, diceNumber);
-      if(diceTwo === 0)
+      if (diceTwo === 0)
         turn = swapUser(turn)
       $("#userTwo").text(inputNameTwo);
       $("#playTwo").text(diceTwo);
