@@ -1,23 +1,21 @@
 // ------------------------------- business logic ---------------------------------------------
-var UserAccount = [];
-UserAccount.push($("#nameOne").val())
-UserAccount.push($("#nameTwo").val())
 
 var turn = 0
-function swapUser () {
+function swapUser(turn) {
   if (turn === 0) {
     turn = 1;
   } else {
     turn = 0;
   }
+  return turn
 }
 
-function Player (name) {
+function Play (name) {
   this.userName = name;
   this.currentScore = 0
 }
 
-Player.prototype.diceScore = function (diceNumber) {
+Play.prototype.diceScore = function (diceNumber) {
   var score = 0;
   for (var i = 1; i <= diceNumber; i++) {
     score += Math.floor((Math.random()*6) + 1);
@@ -25,10 +23,9 @@ Player.prototype.diceScore = function (diceNumber) {
   return score
 }
 
-Player.prototype.dicePlay = function (score, diceNumber) {
+Play.prototype.dicePlay = function (score, diceNumber) {
   if (score === diceNumber) {
     this.currentScore = 0
-    swapUser()
   }
   if (score > diceNumber && this.currentScore < 100){
     this.currentScore += score
@@ -38,30 +35,35 @@ Player.prototype.dicePlay = function (score, diceNumber) {
   }
   return this.currentScore
 }
-
 // ------------------------------- user interface logic ---------------------------------------
 $(document).ready(function() {
-  var playerOne = new Player(name)
-  var playerTwo = new Player(name)
   var diceNumber = parseInt($("#dice").val());
+  var playOne = new Play(name)
+  var playTwo = new Play(name)
+  // var turn = 0
   $("#play").click(function (event) {
     event.preventDefault();
+    console.log(turn);
     var inputNameOne = $("#nameOne").val();
     var inputNameTwo = $("#nameTwo").val();
     if (turn === 0) {
-      var scoreOne = playerOne.diceScore(diceNumber);
-      var diceOne = playerOne.dicePlay(scoreOne, diceNumber);
+      var scoreOne = playOne.diceScore(diceNumber, turn);
+      var diceOne = playOne.dicePlay(scoreOne, diceNumber);
+      if(diceOne === 0)
+        turn = swapUser(turn)
       $("#userOne").text(inputNameOne);
       $("#playOne").text(diceOne);
     }
     if (turn === 1) {
-      var scoreTwo = playerTwo.diceScore(diceNumber);
-      var diceTwo = playerTwo.dicePlay(scoreTwo, diceNumber);
+      var scoreTwo = playTwo.diceScore(diceNumber, turn);
+      var diceTwo = playTwo.dicePlay(scoreTwo, diceNumber);
+      if(diceTwo === 0)
+        turn = swapUser(turn)
       $("#userTwo").text(inputNameTwo);
       $("#playTwo").text(diceTwo);
     }
   });
   $(".hold").click(function () {
-    swapUser()
+    turn = swapUser(turn)
   });
 });
